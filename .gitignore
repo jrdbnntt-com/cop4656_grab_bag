@@ -1,0 +1,17 @@
+# Editor/Enviroment
+.idea
+*.pyc
+__pycache__
+node_modules
+npm-debug.log*
+bower_components
+*.sqlite3
+/venv
+*.tmp
+
+# Project
+/static_collected
+/media
+/webapp/build
+scripts/data
+secret_keys.json

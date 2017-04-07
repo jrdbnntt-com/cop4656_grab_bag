@@ -1,0 +1,7 @@
+requests
+django
+psycopg2
+pylint
+django-extensions
+python-dateutil
+pytz
