@@ -28,7 +28,8 @@ MEDIA_URL = '/media/'
 SECRET_KEY = get_key(Keys.APP_SECRET)
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = get_key(Keys.APP_DEBUG)
+DEBUG = get_key(Keys.APP_DEBUG).lower() == 'true'
+
 
 ALLOWED_HOSTS = [
     'localhost',

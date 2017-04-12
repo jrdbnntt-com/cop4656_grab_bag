@@ -50,9 +50,11 @@ class KeyManager(object):
         # Load keys from environment variables
         for key in environment_keys:
             value = os.getenv(key)
-            if value is None and self.all_keys[key] is None:
-                raise ValueError('Missing environment key "{}"'.format(key))
-            self.all_keys[key] = str(value)
+            if value is None:
+                if key not in self.all_keys and key not in file_keys:
+                    raise ValueError('Missing environment key "{}"'.format(key))
+            else:
+                self.all_keys[key] = str(value)
 
         # Load keys from file
         with open(key_file_path) as file:
@@ -89,3 +91,6 @@ class KeyManager(object):
             raise ValueError('Key "{}" not implemented'.format(key_name))
         raise ValueError('Invalid key "{}"'.format(key_name))
 
+    def print_all(self, print_func=print):
+        for key, value in self.all_keys.items():
+            print_func("{}={}".format(key, value))

@@ -18,8 +18,6 @@ from . admin import site_admin
 from django.conf.urls import include, url
 
 app_name = 'grab_bag'
-handler404 = 'api.views.handler404'
-handler500 = 'api.views.handler500'
 
 urlpatterns = [
     url(r'^admin/', site_admin.urls),
