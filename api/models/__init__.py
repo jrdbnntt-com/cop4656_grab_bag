@@ -1,3 +1,4 @@
 from .player import Player
-from .player_instance import PlayerInstance
 from .game import Game
+from .player_instance import PlayerInstance
+from .steal_attempt import StealAttempt
