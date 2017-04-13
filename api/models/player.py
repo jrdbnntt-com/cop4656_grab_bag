@@ -23,7 +23,7 @@ class Player(models.Model):
         if self.location_updated_at is None:
             return False
 
-        expire_time = self.location_updated_at.date() + timedelta(minutes=self.LOCATION_EXPIRATION_MINUTES)
+        expire_time = self.location_updated_at + timedelta(minutes=self.LOCATION_EXPIRATION_MINUTES)
         return expire_time < timezone.now()
 
 
@@ -31,7 +31,7 @@ class Player(models.Model):
 class PlayerAdmin(admin.ModelAdmin):
     list_filter = ()
     list_display = ('id', 'user', 'location_lat', 'location_lng', 'location_updated_at', 'created')
-    list_editable = ()
+    list_editable = ('location_lat', 'location_lng', 'location_updated_at')
     list_display_links = ('id',)
     search_fields = ('user__email', 'user__first_name', 'user__last_name')
     ordering = ('-created',)

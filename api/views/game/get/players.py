@@ -19,6 +19,7 @@ class ResponseForm(forms.Form):
 
 
 class PlayersView(ApiView):
+    http_method_names = ['get']
     request_form_class = RequestForm
     response_form_class = ResponseForm
     access_manager = acl.AccessManager(acl_accept=[acl.groups.USER])
