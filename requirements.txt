@@ -5,3 +5,4 @@ pylint
 django-extensions
 python-dateutil
 pytz
+geopy
