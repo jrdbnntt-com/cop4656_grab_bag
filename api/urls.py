@@ -13,5 +13,7 @@ urlpatterns = [
 
     url(r'game/create$', views.game.CreateView.as_view()),
     url(r'game/join$', views.game.JoinView.as_view()),
-    url(r'game/start$', views.game.StartView.as_view())
+    url(r'game/start$', views.game.StartView.as_view()),
+
+    url(r'game/get/summary', views.game.get.SummaryView.as_view())
 ]
