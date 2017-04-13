@@ -40,6 +40,8 @@ ALLOWED_HOSTS = [
 ]
 
 
+SESSION_COOKIE_AGE = 60*60*24*365*10    # Session expire after 10y to keep log in active
+
 # Application definition
 
 INSTALLED_APPS = [

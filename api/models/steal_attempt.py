@@ -48,7 +48,7 @@ class StealAttempt(models.Model):
     def victim_can_defend(self) -> bool:
         if self.status is self.Status.COMPLETE:
             return False
-        return self.victim_defend_expiration_time() < timezone.now().date()
+        return self.victim_defend_expiration_time() < timezone.now()
 
 
 @admin.register(StealAttempt, site=site_admin)

@@ -24,7 +24,7 @@ class Player(models.Model):
             return False
 
         expire_time = self.location_updated_at.date() + timedelta(minutes=self.LOCATION_EXPIRATION_MINUTES)
-        return expire_time < timezone.now().date()
+        return expire_time < timezone.now()
 
 
 @admin.register(Player, site=site_admin)
