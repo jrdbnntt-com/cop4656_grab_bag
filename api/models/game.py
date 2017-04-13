@@ -22,12 +22,13 @@ class Game(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     creator = models.ForeignKey(to=Player, on_delete=models.CASCADE)
     status = models.IntegerField(default=Status.START_PENDING, choices=Status.choices)
+    end_time = models.DateTimeField(blank=True, null=True)
+    start_time = models.DateTimeField(blank=True, null=True)
 
     # Configuration
     name = models.CharField(max_length=100)
-    join_code = models.CharField(max_length=10)
-    start_time = models.DateTimeField()
-    end_time = models.DateTimeField()
+    join_code = models.CharField(max_length=100)
+    duration_in_minutes = models.PositiveIntegerField()
     maximum_steal_distance_in_meters = models.PositiveIntegerField()
     starting_coins = models.PositiveIntegerField()
     steal_percent = models.PositiveIntegerField()           # Percent of victim coins stolen on successful steal
@@ -44,8 +45,8 @@ class Game(models.Model):
 @admin.register(Game, site=site_admin)
 class GameAdmin(admin.ModelAdmin):
     list_filter = ('status',)
-    list_display = ('id', 'name', 'creator', 'start_time', 'end_time', 'created')
+    list_display = ('id', 'name', 'join_code', 'status', 'creator', 'start_time', 'end_time', 'created')
     list_editable = ()
     list_display_links = ('id',)
-    search_fields = ('name',)
+    search_fields = ('name', 'join_code', 'creator__user__username')
     ordering = ('-created',)
