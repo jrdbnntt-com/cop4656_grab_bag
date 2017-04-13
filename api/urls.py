@@ -5,4 +5,7 @@ urlpatterns = [
     url(r'test/simple_post_test$', views.test.SimplePostTestView.as_view()),
     url(r'test/get/simple_get_test$', views.test.get.SimpleGetTestView.as_view()),
 
+    url(r'user/login$', views.user.LogInView.as_view()),
+    url(r'user/logout$', views.user.LogOutView.as_view()),
+    url(r'user/register$', views.user.RegisterView.as_view())
 ]

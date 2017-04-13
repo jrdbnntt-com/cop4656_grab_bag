@@ -5,6 +5,15 @@ This is the backend for the project hosted on a live server.
 
 The base url for all requests is "https://gb.jrdbnntt.com/".
 
+# Technical components
+* Session management
+* User accounts & authentication 
+* Django administration web interface
+* Authenticated JSON-based REST API
+* Push Notifications (sent via [Firebase Cloud Messaging (FCM)](https://firebase.google.com/docs/cloud-messaging/))
+* PostgreSQL Database (managed by Django's Models)
+* Cron Job Scheduling
+
 # Development
 ## Database Connection
 There is a PostgreSQL 9.5 database hosted on a private server for the app. In development, you will want to set up an SSH tunnel for the database port.
