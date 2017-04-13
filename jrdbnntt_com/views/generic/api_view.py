@@ -29,6 +29,7 @@ class ApiView(View):
     response_form_class = forms.Form    # Override each time
     access_manager = acl.AccessManager()
     allowed_after_current_hackathon_ends = True
+    validate_response = False
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -74,7 +75,7 @@ class ApiView(View):
 
             # Validate response
             response_form = self.response_form_class(res)
-            if not response_form.is_valid():
+            if not response_form.is_valid() and self.validate_response:
                 raise InternalServerError(ValidationError(response_form.errors.as_data()))
             res = response_form.cleaned_data
 
