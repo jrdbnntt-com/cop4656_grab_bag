@@ -16,8 +16,8 @@ class RequestForm(forms.Form):
 class ResponseForm(forms.Form):
     id = forms.IntegerField()
     status = forms.IntegerField()
-    end_time = forms.DateTimeField(blank=True)
-    start_time = forms.DateTimeField(blank=True)
+    end_time = forms.DateTimeField(required=False)
+    start_time = forms.DateTimeField(required=False)
     name = forms.CharField()
     join_code = forms.CharField()
     duration_in_minutes = forms.IntegerField()
