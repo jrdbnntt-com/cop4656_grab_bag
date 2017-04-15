@@ -19,4 +19,10 @@ urlpatterns = [
 
     url(r'game/get/summary$', views.game.get.SummaryView.as_view()),
     url(r'game/get/players$', views.game.get.PlayersView.as_view()),
+
+    url(r'game/steal/attack_end$', views.game.steal.AttackEndView.as_view()),
+    url(r'game/steal/attack_start$', views.game.steal.AttackStartView.as_view()),
+    url(r'game/steal/defend_end$', views.game.steal.DefendEndView.as_view()),
+    url(r'game/steal/defend_start$', views.game.steal.DefendStartView.as_view()),
+    url(r'game/steal/log$', views.game.steal.LogView.as_view()),
 ]

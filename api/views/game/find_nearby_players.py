@@ -22,6 +22,8 @@ class RequestForm(forms.Form):
 class ResponseForm(forms.Form):
     pis_in_steal_range = JsonField()
     pis_in_view_range = JsonField()
+    steal_radius_in_meters = forms.FloatField()
+    cardinal_spread = JsonField()
 
 
 class FindNearbyPlayersView(ApiView):
@@ -90,3 +92,5 @@ class FindNearbyPlayersView(ApiView):
 
         res['pis_in_steal_range'] = pis_in_steal_range
         res['pis_in_view_range'] = pis_in_view_range
+        res['steal_radius_in_meters'] = msd
+        res['cardinal_spread'] = spread.to_dict()

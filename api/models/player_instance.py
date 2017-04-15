@@ -13,12 +13,6 @@ class PlayerInstance(models.Model):
     def __str__(self):
         return '[PlayerInstance {}]'.format(self.player.user.username)
 
-    def can_steal_from(self, player_instance) -> bool:
-        pass
-
-    def nearby_players(self):
-        pass
-
 
 @admin.register(PlayerInstance, site=site_admin)
 class PlayerInstanceAdmin(admin.ModelAdmin):

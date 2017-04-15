@@ -8,21 +8,27 @@ from django.utils import timezone
 
 class StealAttempt(models.Model):
     class Status(object):
-        WAITING_FOR_DEFENSE = 0
-        VICTIM_DEFENDING = 1
-        COMPLETE = 2
+        WAITING_FOR_THIEF_END = 0
+        WAITING_FOR_DEFENSE_START = 2
+        WAITING_FOR_DEFENSE_END = 3
+        COMPLETE = 4
+        EXPIRED = 5
+
         choices = (
-                (WAITING_FOR_DEFENSE, 'WAITING_FOR_DEFENSE'),
-                (VICTIM_DEFENDING, 'VICTIM_DEFENDING'),
-                (COMPLETE, 'COMPLETE')
+                (WAITING_FOR_THIEF_END, 'WAITING_FOR_THIEF_END'),
+                (WAITING_FOR_DEFENSE_START, 'WAITING_FOR_DEFENSE_START'),
+                (WAITING_FOR_DEFENSE_END, 'WAITING_FOR_DEFENSE_END'),
+                (COMPLETE, 'COMPLETE'),
+                (EXPIRED, 'EXPIRED')
             )
 
     created = models.DateTimeField(auto_now_add=True)
+    completed_at = models.DateTimeField(null=True, blank=True)
     game = models.ForeignKey(to=Game, on_delete=models.CASCADE)
     thief = models.ForeignKey(to=PlayerInstance, on_delete=models.CASCADE, related_name='player_instance_thief')
     victim = models.ForeignKey(to=PlayerInstance, on_delete=models.CASCADE, related_name='player_instance_victim')
-    status = models.PositiveIntegerField(default=Status.WAITING_FOR_DEFENSE, choices=Status.choices)
-    thief_score = models.PositiveIntegerField()
+    status = models.PositiveIntegerField(default=Status.WAITING_FOR_THIEF_END, choices=Status.choices)
+    thief_score = models.PositiveIntegerField(null=True, blank=True)
     victim_score = models.PositiveIntegerField(null=True, blank=True)
     coins_stolen = models.PositiveIntegerField(null=True, blank=True)
 
@@ -37,9 +43,9 @@ class StealAttempt(models.Model):
         expire_time = self.created.date()
         steal_defend_seconds = self.game.steal_defend_seconds
 
-        if self.status is self.Status.WAITING_FOR_DEFENSE:
+        if self.status is self.Status.WAITING_FOR_DEFENSE_END:
             expire_time += timedelta(seconds=steal_defend_seconds)
-        elif self.status is self.Status.VICTIM_DEFENDING:
+        elif self.status is self.Status.WAITING_FOR_DEFENSE_START:
             # Make sure they have time to actually play the defend game
             expire_time += timedelta(seconds=max(steal_defend_seconds*2, self.game.steal_game_seconds*2))
 
@@ -49,6 +55,16 @@ class StealAttempt(models.Model):
         if self.status is self.Status.COMPLETE:
             return False
         return self.victim_defend_expiration_time() < timezone.now()
+
+    def calculate_coins_stolen(self) -> int:
+        if self.victim_score is not None and self.thief_score < self.victim_score:
+            # Failed to steal
+            return 0
+
+        coins = int(round(self.victim.coins * (self.game.steal_percent/100.0)))
+        if coins > self.victim.coins:
+            coins = self.victim.coins
+        return coins
 
 
 @admin.register(StealAttempt, site=site_admin)

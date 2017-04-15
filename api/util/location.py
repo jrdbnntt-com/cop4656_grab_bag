@@ -27,6 +27,12 @@ class Location(object):
     def __str__(self):
         return '{},{}'.format(self.lat, self.lng)
 
+    def to_dict(self):
+        return {
+            'lat': self.lat,
+            'lng': self.lng
+        }
+
 
 class CardinalSpread(object):
     def __init__(self, origin_lat: float, origin_lng: float, radius_in_meters: float):
@@ -35,6 +41,12 @@ class CardinalSpread(object):
         self.east = self.converge_on_distance(0.00001, self.do_step_east, radius_in_meters)
         self.south = self.converge_on_distance(0.00001, self.do_step_south, radius_in_meters)
         self.west = self.converge_on_distance(0.00001, self.do_step_west, radius_in_meters)
+
+        # Infer corners
+        self.north_west = Location(self.north.lat, self.west.lng)
+        self.north_east = Location(self.north.lat, self.east.lng)
+        self.south_west = Location(self.south.lat, self.west.lng)
+        self.south_east = Location(self.south.lat, self.west.lat)
 
     @staticmethod
     def do_step_north(loc: Location, step: float):
@@ -82,4 +94,16 @@ class CardinalSpread(object):
         return '{}\n\n{}\n{}\n{}\n{}'.format(
             self.origin, self.north, self.east, self.south, self.west
         )
+
+    def to_dict(self):
+        return {
+            'north': self.north.to_dict(),
+            'west': self.west.to_dict(),
+            'south': self.south.to_dict(),
+            'east': self.east.to_dict(),
+            'north_west': self.north_west.to_dict(),
+            'north_east': self.north_east.to_dict(),
+            'south_east': self.south_east.to_dict(),
+            'south_west': self.south_west.to_dict()
+        }
 
