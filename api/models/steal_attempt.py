@@ -61,7 +61,7 @@ class StealAttempt(models.Model):
             # Failed to steal
             return 0
 
-        coins = int(round(self.victim.coins * (self.game.steal_percent/100.0)))
+        coins = max(int(round(self.victim.coins * (self.game.steal_percent/100.0))), 1)
         if coins > self.victim.coins:
             coins = self.victim.coins
         return coins
@@ -70,8 +70,11 @@ class StealAttempt(models.Model):
 @admin.register(StealAttempt, site=site_admin)
 class StealAttemptAdmin(admin.ModelAdmin):
     list_filter = ('status',)
-    list_display = ('id', 'game', 'thief', 'victim', 'coins_stolen', 'created')
-    list_editable = ()
+    list_display = (
+        'id', 'game', 'thief', 'victim', 'status', 'thief_score', 'victim_score', 'coins_stolen',
+        'created', 'completed_at'
+    )
+    list_editable = ('thief_score', 'victim_score')
     list_display_links = ('id',)
     ordering = ('-created',)
     search_fields = (

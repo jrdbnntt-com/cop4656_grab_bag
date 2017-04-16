@@ -26,6 +26,7 @@ class ResponseForm(forms.Form):
     steal_percent = forms.IntegerField()
     steal_game_seconds = forms.IntegerField()
     steal_defend_seconds = forms.IntegerField()
+    steal_cool_down_seconds = forms.IntegerField()
     player_count = forms.IntegerField()
     creator_username = forms.CharField()
 
@@ -55,5 +56,7 @@ class SummaryView(ApiView):
         res['steal_percent'] = game.steal_percent
         res['steal_game_seconds'] = game.steal_game_seconds
         res['steal_defend_seconds'] = game.steal_defend_seconds
+        res['steal_cool_down_seconds'] = game.steal_cool_down_seconds
         res['player_count'] = PlayerInstance.objects.filter(game=game).count()
         res['creator_username'] = game.creator.user.username
+

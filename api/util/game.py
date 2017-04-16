@@ -6,6 +6,7 @@ from api.models import Game, PlayerInstance, StealAttempt
 from django.core.exceptions import ValidationError
 from django.contrib.auth.models import User
 from django.utils import timezone
+from datetime import timedelta
 
 
 def get_valid_game(game_id: int) -> Game:
@@ -52,6 +53,7 @@ def get_valid_steal_attempt(
 def finalize_steal_attempt(attempt: StealAttempt):
     attempt.status = StealAttempt.Status.COMPLETE
     attempt.completed_at = timezone.now()
+    attempt.save()
 
     successful_steal = attempt.coins_stolen > 0
 
@@ -63,3 +65,9 @@ def finalize_steal_attempt(attempt: StealAttempt):
         attempt.victim.save()
 
     # TODO send notification to players with result
+
+
+def has_attacked_player_recently(game: Game, thief: PlayerInstance, victim: PlayerInstance) -> bool:
+    minimum_recent_time = timezone.now() - timedelta(seconds=game.steal_cool_down_seconds)
+    return StealAttempt.objects.filter(game=game, thief=thief, victim=victim, created__gte=minimum_recent_time).exists()
+

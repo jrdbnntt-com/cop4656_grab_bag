@@ -6,9 +6,10 @@
 from django import forms
 from jrdbnntt_com.views.generic import ApiView
 from jrdbnntt_com.util import acl
-from api.models import PlayerInstance, Game, Player
+from api.models import PlayerInstance, Game, Player, StealAttempt
 from django.core.exceptions import ValidationError
 from django.utils import timezone
+from datetime import timedelta
 from jrdbnntt_com.util.forms import JsonField
 from api.util import location
 
@@ -22,6 +23,7 @@ class RequestForm(forms.Form):
 class ResponseForm(forms.Form):
     pis_in_steal_range = JsonField()
     pis_in_view_range = JsonField()
+    pis_in_cool_down = JsonField()
     steal_radius_in_meters = forms.FloatField()
     cardinal_spread = JsonField()
 
@@ -68,6 +70,7 @@ class FindNearbyPlayersView(ApiView):
 
         pis_in_steal_range = []
         pis_in_view_range = []
+        pis_in_cool_down = []
         for pi_obj in nearby_pis:
             if not pi_obj.player.has_valid_location():
                 continue
@@ -86,7 +89,18 @@ class FindNearbyPlayersView(ApiView):
             }
 
             if dist <= msd:
-                pis_in_steal_range.append(pi)
+                # Check for a cool down
+                min_recent_steal_time = timezone.now() - timedelta(seconds=game.steal_cool_down_seconds)
+                recent_attempts = StealAttempt.objects.filter(
+                    game=game, thief__player=player, victim=pi, created__gte=min_recent_steal_time
+                ).all()
+                if len(recent_attempts) > 0:
+                    cde = recent_attempts[0].created + timedelta(seconds=game.steal_cool_down_seconds)
+                    pi['cool_down_end_time'] = cde.isoformat()
+                    pis_in_cool_down.append(pi)
+                else:
+                    pis_in_steal_range.append(pi)
+
             else:
                 pis_in_view_range.append(pi)
 

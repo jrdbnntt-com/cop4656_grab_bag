@@ -23,7 +23,7 @@ class DefendEndView(ApiView):
         # Get the attempt
         attempt = StealAttempt.objects.filter(
             id=req['steal_attempt_id'],
-            status=StealAttempt.Status.WAITING_FOR_DEFENSE_START,
+            status=StealAttempt.Status.WAITING_FOR_DEFENSE_END,
             victim__player__user=request.user
         ).all()
         if len(attempt) == 0:
@@ -31,7 +31,7 @@ class DefendEndView(ApiView):
         attempt = attempt[0]
 
         # Finalize the attempt
-        attempt.thief_score = req['score']
+        attempt.victim_score = req['score']
         attempt.coins_stolen = attempt.calculate_coins_stolen()
         attempt.save()
         finalize_steal_attempt(attempt)

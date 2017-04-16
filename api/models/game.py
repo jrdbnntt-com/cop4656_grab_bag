@@ -34,6 +34,7 @@ class Game(models.Model):
     steal_percent = models.PositiveIntegerField()           # Percent of victim coins stolen on successful steal
     steal_game_seconds = models.PositiveIntegerField()      # Seconds to tap screen in steal game (defending/stealing)
     steal_defend_seconds = models.PositiveIntegerField()    # Seconds to wait for victim to initiate defend
+    steal_cool_down_seconds = models.PositiveIntegerField() # Seconds before thief can steal from victim again
 
     def __str__(self):
         return '[Game {}]'.format(self.name)

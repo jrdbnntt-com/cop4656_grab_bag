@@ -8,6 +8,7 @@ from jrdbnntt_com.util import acl
 from api.util.game import get_valid_game_with_status, get_valid_player_instance, get_valid_player_instance_from_user
 from api.models import Game, StealAttempt
 from api.util import location
+from api.util.game import has_attacked_player_recently
 from django.core.exceptions import ValidationError
 
 
@@ -29,12 +30,21 @@ class AttackStartView(ApiView):
         # Get the game and players
         game = get_valid_game_with_status(game_id=req['game_id'], status=Game.Status.ACTIVE)
         victim = get_valid_player_instance(game, req['victim_instance_id'], 'Invalid victim_instance_id')
-        thief = get_valid_player_instance_from_user(game, request.user, 'Invalid attacker, player not in game')
+        thief = get_valid_player_instance_from_user(game, request.user, 'Invalid thief, player not in game')
+
+        # Make sure not self
+        if victim.id == thief.id:
+            raise ValidationError('Cannot steal from self self')
 
         # Make sure victim is in range of attacker
         dist = location.distance_in_meters(thief.player, victim.player)
         if dist > game.maximum_steal_distance_in_meters:
             raise ValidationError('Victim out of steal range')
+
+        # Make sure thief hasn't already attacked them recently
+
+        if has_attacked_player_recently(game=game, thief=thief, victim=victim):
+            raise ValidationError('Cannot steal from player, you have already attempted a steal from them recently')
 
         # All good, start the steal
         attempt = StealAttempt.objects.create(

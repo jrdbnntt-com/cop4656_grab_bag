@@ -19,6 +19,7 @@ class RequestForm(forms.Form):
     steal_percent = forms.IntegerField(min_value=1)
     steal_game_seconds = forms.IntegerField(min_value=1)
     steal_defend_seconds = forms.IntegerField(min_value=1)
+    steal_cool_down_seconds = forms.IntegerField(min_value=0)
 
 
 class ResponseForm(forms.Form):
@@ -47,7 +48,8 @@ class CreateView(ApiView):
             starting_coins=req['starting_coins'],
             steal_percent=req['steal_percent'],
             steal_game_seconds=req['steal_game_seconds'],
-            steal_defend_seconds=req['steal_defend_seconds']
+            steal_defend_seconds=req['steal_defend_seconds'],
+            steal_cool_down_seconds=req['steal_cool_down_seconds']
         )
 
         # Give the player an instance

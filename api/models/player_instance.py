@@ -18,7 +18,7 @@ class PlayerInstance(models.Model):
 class PlayerInstanceAdmin(admin.ModelAdmin):
     list_filter = ()
     list_display = ('id', 'player', 'game', 'coins', 'created')
-    list_editable = ()
+    list_editable = ('coins',)
     list_display_links = ('id',)
     search_fields = ('player__user_username', 'game__name')
     ordering = ('-created',)

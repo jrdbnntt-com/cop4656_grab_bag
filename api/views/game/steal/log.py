@@ -31,9 +31,10 @@ class LogView(ApiView):
         for attempt in StealAttempt.objects.filter(
                 game=game, status=StealAttempt.Status.COMPLETE
         ).order_by('-completed_at').all():
+            print('dasd')
             completed_steal_attempts.append({
                 'id': attempt.id,
-                'completed_at': attempt.completed_at,
+                'completed_at': attempt.completed_at.isoformat(),
                 'victim_username': attempt.victim.player.user.username,
                 'thief_username': attempt.thief.player.user.username,
                 'coins_stolen': attempt.coins_stolen,

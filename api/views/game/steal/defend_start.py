@@ -29,7 +29,7 @@ class DefendStartView(ApiView):
         attempt = attempt[0]
 
         # Update the status
-        attempt.status = StealAttempt.Status.WAITING_FOR_DEFENSE_START
+        attempt.status = StealAttempt.Status.WAITING_FOR_DEFENSE_END
         attempt.save()
 
         # TODO cancel defend start timeout
