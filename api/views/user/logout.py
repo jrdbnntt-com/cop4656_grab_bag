@@ -8,6 +8,7 @@ from jrdbnntt_com.util import acl
 
 
 class LogOutView(ApiView):
+    http_method_names = ['post', 'get']
     access_manager = acl.AccessManager(acl_accept=[acl.groups.USER])
 
     def work(self, request, req, res):
