@@ -16,9 +16,9 @@ urlpatterns = [
     url(r'game/join$', views.game.JoinView.as_view()),
     url(r'game/start$', views.game.StartView.as_view()),
     url(r'game/find_nearby_players', views.game.FindNearbyPlayersView.as_view()),
+    url(r'game/summary$', views.game.SummaryView.as_view()),
+    url(r'game/players$', views.game.PlayersView.as_view()),
 
-    url(r'game/get/summary$', views.game.get.SummaryView.as_view()),
-    url(r'game/get/players$', views.game.get.PlayersView.as_view()),
 
     url(r'game/steal/attack_end$', views.game.steal.AttackEndView.as_view()),
     url(r'game/steal/attack_start$', views.game.steal.AttackStartView.as_view()),
