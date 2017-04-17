@@ -8,6 +8,7 @@ urlpatterns = [
     url(r'user/login$', views.user.LogInView.as_view()),
     url(r'user/logout$', views.user.LogOutView.as_view()),
     url(r'user/register$', views.user.RegisterView.as_view()),
+    url(r'user/get/summary$', views.user.get.SummaryView.as_view()),
 
     url(r'player/update_location$', views.player.UpdateLocationView.as_view()),
     url(r'player/get/game_history$', views.player.get.GameHistoryView.as_view()),
