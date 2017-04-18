@@ -92,16 +92,16 @@ class FindNearbyPlayersView(ApiView):
 
             if dist <= msd:
                 # Check for a cool down
-                min_recent_steal_time = timezone.now() - timedelta(seconds=game.steal_cool_down_seconds)
-                recent_attempts = StealAttempt.objects.filter(
-                    game=game, thief__player=thief_instance, victim=pi, created__gte=min_recent_steal_time
-                ).all()
-                if len(recent_attempts) > 0:
-                    cde = recent_attempts[0].created + timedelta(seconds=game.steal_cool_down_seconds)
-                    pi['cool_down_end_time'] = cde.isoformat()
-                    pis_in_cool_down.append(pi)
-                else:
-                    pis_in_steal_range.append(pi)
+                # min_recent_steal_time = timezone.now() - timedelta(seconds=game.steal_cool_down_seconds)
+                # recent_attempts = StealAttempt.objects.filter(
+                #     game=game, thief__player=player, victim=pi, created__gte=min_recent_steal_time
+                # ).all()
+                # if len(recent_attempts) > 0:
+                #     cde = recent_attempts[0].created + timedelta(seconds=game.steal_cool_down_seconds)
+                #     pi['cool_down_end_time'] = cde.isoformat()
+                #     pis_in_cool_down.append(pi)
+                # else:
+                pis_in_steal_range.append(pi)
 
             else:
                 pis_in_view_range.append(pi)
