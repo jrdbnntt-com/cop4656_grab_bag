@@ -52,7 +52,7 @@ class FindNearbyPlayersView(ApiView):
         # Get pi
         thief_instance = PlayerInstance.objects.filter(game=game, player=player).all()
         if not len(thief_instance) == 0:
-            raise ValidationError('Invalid game, not a player in it')
+            raise ValidationError('Invalid game, not a player in game ' + game.name)
         thief_instance = thief_instance[0]
 
         mvd = game.max_view_distance_in_meters()
