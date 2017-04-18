@@ -49,9 +49,11 @@ class FindNearbyPlayersView(ApiView):
         player.location_updated_at = timezone.now()
         player.save()
 
-        # Make sure player is in game
-        if not PlayerInstance.objects.filter(game=game, player=player).exists():
+        # Get pi
+        thief_instance = PlayerInstance.objects.filter(game=game, player=player).all()
+        if not len(thief_instance) == 0:
             raise ValidationError('Invalid game, not a player in it')
+        thief_instance = thief_instance[0]
 
         mvd = game.max_view_distance_in_meters()
         msd = game.maximum_steal_distance_in_meters
@@ -92,7 +94,7 @@ class FindNearbyPlayersView(ApiView):
                 # Check for a cool down
                 min_recent_steal_time = timezone.now() - timedelta(seconds=game.steal_cool_down_seconds)
                 recent_attempts = StealAttempt.objects.filter(
-                    game=game, thief__player=player, victim=pi, created__gte=min_recent_steal_time
+                    game=game, thief__player=thief_instance, victim=pi, created__gte=min_recent_steal_time
                 ).all()
                 if len(recent_attempts) > 0:
                     cde = recent_attempts[0].created + timedelta(seconds=game.steal_cool_down_seconds)
