@@ -5,7 +5,7 @@
 from django import forms
 from jrdbnntt_com.views.generic import ApiView
 from jrdbnntt_com.util import acl
-from api.models import PlayerInstance
+from api.models import PlayerInstance, Game
 from jrdbnntt_com.util.forms import JsonField
 
 
@@ -26,7 +26,8 @@ class GameHistoryView(ApiView):
                 'player_instance_coins': pi.coins,
                 'game_id': pi.game.id,
                 'game_status': pi.game.status,
-                'game_name': pi.game.name
+                'game_name': pi.game.name,
+                'player_count': PlayerInstance.objects.filter(game=pi.game).count()
             })
 
         res['games'] = games
