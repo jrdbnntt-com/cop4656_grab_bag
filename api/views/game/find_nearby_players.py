@@ -43,7 +43,7 @@ class FindNearbyPlayersView(ApiView):
             raise ValidationError('Game not active')
 
         # Get player & update location
-        player = Player.objects.get(game=game, user=request.user)
+        player = Player.objects.get(user=request.user)
         player.location_lat = req['location_lat']
         player.location_lng = req['location_lng']
         player.location_updated_at = timezone.now()
